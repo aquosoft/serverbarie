@@ -6,7 +6,7 @@ require('./common');
 const comandos = require('./comando');
 const app = express();
 const open = require('open');
-
+const setting   = require ('./src/settingServer');
 
 app.use(cors());
 app.options('*', cors());
@@ -19,8 +19,8 @@ app.use(express.static(__dirname + '/public/'));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
-const HOST = '192.168.0.46';
-const PORT = '2000'
+const HOST = setting.HOST;//'190.247.169.171';
+const PORT = setting.PORT;//'3007'
 
 app.listen(PORT, function() {
   console.log('Servidor web escuchando en el puerto {0}'.format(PORT));
@@ -54,15 +54,15 @@ const fs = require('fs');
 const { arch } = require('process');
 
 
-app.options('/crearPdf', cors());
-app.get('/crearPdf', cors(), function(req, res) {
+
+app.options('/crearPdfPractica', cors());
+app.get('/crearPdfPractica', cors(), function(req, res) {
     var identity = makeIdentityFromRequest(req);
 
     if (comandos.esCommando('ObtenerUltimoContador')) {
         comandos.ejecutar(identity, 'LimpiarDirectorioTemporal', function(result) {
 
         },{});    
-
         comandos.ejecutar(identity, 'ObtenerUltimoContador', function(result) {
             let resultado = result.rows[0].CantidadActual;
             let nro = parseInt(resultado) + 1;
@@ -70,17 +70,137 @@ app.get('/crearPdf', cors(), function(req, res) {
             let pdfDoc = new PDFDocument;
 
             let dir = __dirname + '/public/tmp/';
-            let archPdf = `ArchivoPdf_${nro}.pdf`;
+            let archPdf = `PdfPractica_${nro}.pdf`;
             let pathPdf = `${dir}${archPdf}`;
             
             pdfDoc.pipe(fs.createWriteStream(pathPdf));
             
-            pdfDoc.image('fondo01.PNG', 0, 0, 0);     
+            pdfDoc.image('fondoPractica.png', 0, 0, 0);     
             
             pdfDoc.fontSize(24);
             pdfDoc.text("{0}".format(nro),10,10);            
             pdfDoc.text("{0}".format(nro),100,10);
           
+
+            pdfDoc.end();
+
+            let psf = {
+                Detalle : pathPdf,
+                unTipo : 3
+            }
+            comandos.ejecutar(identity, 'ActualizarContador', function(result) {
+                let url = `http://${HOST}:${PORT}/tmp/${archPdf}`;
+                responderJSON(res, url);
+            },psf);    
+
+            
+        }, {unTipo:3});
+    }
+    else
+        throw 'WS invalido';
+});
+
+app.options('/crearPdfConsulta', cors());
+app.get('/crearPdfConsulta', cors(), function(req, res) {
+    var identity = makeIdentityFromRequest(req);
+
+    if (comandos.esCommando('ObtenerUltimoContador')) {
+        comandos.ejecutar(identity, 'LimpiarDirectorioTemporal', function(result) {
+
+        },{});    
+        comandos.ejecutar(identity, 'ObtenerUltimoContador', function(result) {
+            let resultado = result.rows[0].CantidadActual;
+            let nro = parseInt(resultado) + 1;
+            console.log('ultimoPdfCreado: {0}'.format(resultado));
+            let pdfDoc = new PDFDocument;
+
+            let dir = __dirname + '/public/tmp/';
+            let archPdf = `PdfConsulta_${nro}.pdf`;
+            let pathPdf = `${dir}${archPdf}`;
+            
+            pdfDoc.pipe(fs.createWriteStream(pathPdf));
+            
+            pdfDoc.image('fondoConsulta.png', 0, 0, 0);     
+            
+            pdfDoc.fontSize(24);
+            pdfDoc.text("{0}".format(nro),10,10);            
+            pdfDoc.text("{0}".format(nro),100,10);
+          
+
+            pdfDoc.end();
+
+            let psf = {
+                Detalle : pathPdf,
+                unTipo : 2
+            }
+            comandos.ejecutar(identity, 'ActualizarContador', function(result) {
+                let url = `http://${HOST}:${PORT}/tmp/${archPdf}`;
+                responderJSON(res, url);
+            },psf);    
+
+            
+        }, {unTipo:2});
+    }
+    else
+        throw 'WS invalido';
+});
+
+app.options('/crearPdfFarmacia', cors());
+app.get('/crearPdfFarmacia', cors(), function(req, res) {
+    var identity = makeIdentityFromRequest(req);
+
+    if (comandos.esCommando('ObtenerUltimoContador')) {
+        comandos.ejecutar(identity, 'LimpiarDirectorioTemporal', function(result) {
+
+        },{});    
+        comandos.ejecutar(identity, 'ObtenerUltimoContador', function(result) {
+            let resultado = result.rows[0].CantidadActual;
+            let nro = parseInt(resultado) + 1;
+            console.log('ultimoPdfCreado: {0}'.format(resultado));
+            let pdfDoc = new PDFDocument;
+
+            let dir = __dirname + '/public/tmp/';
+            let archPdf = `PdfFarmacia_${nro}.pdf`;
+            let pathPdf = `${dir}${archPdf}`;
+            
+            pdfDoc.pipe(fs.createWriteStream(pathPdf));
+            
+            pdfDoc.image('fondoFarmacia.png', 0, 0, 0);     
+            
+            pdfDoc.fontSize(24);
+            pdfDoc.text("{0}".format(nro),10,10);            
+            pdfDoc.text("{0}".format(nro),100,10);
+          
+            pdfDoc.end();
+
+            let psf = {
+                Detalle : pathPdf,
+                unTipo : 1
+            }
+            comandos.ejecutar(identity, 'ActualizarContador', function(result) {
+                let url = `http://${HOST}:${PORT}/tmp/${archPdf}`;
+                responderJSON(res, url);
+            },psf);    
+
+            
+        }, {unTipo:1});
+    }
+    else
+        throw 'WS invalido';
+});
+
+function responderJSON(res, data) {
+    var r_json = JSON.stringify(data);
+    res.writeHead(200, {
+        'Content-type': 'application/json',
+        'Content-Length': Buffer.byteLength(r_json),
+    });
+    res.write(r_json);
+    res.end();
+}
+
+
+
             // pdfDoc
             //     .fillColor('blue')
             //     .text("This is a link", { link: 'https://pdfkit.org/docs/guide.pdf', underline: true });
@@ -134,37 +254,3 @@ app.get('/crearPdf', cors(), function(req, res) {
             // // draw bounding rectangle
             // pdfDoc.rect(pdfDoc.x, 200, 310, pdfDoc.y).stroke();
 
-
-            pdfDoc.end();
-
-            let psf = {
-                Detalle : pathPdf
-            }
-            comandos.ejecutar(identity, 'ActualizarContador', function(result) {
-                let url = `http://${HOST}:${PORT}/tmp/${archPdf}`;
-
-                // opens the url in the default browser 
-                open(url);
-                
-                // specify the app to open in 
-                //open('http://sindresorhus.com', {app: 'firefox'});
-                res.end();
-                //responderJSON(res, url);
-            },psf);    
-
-            
-        }, {});
-    }
-    else
-        throw 'WS invalido';
-});
-
-function responderJSON(res, data) {
-    var r_json = JSON.stringify(data);
-    res.writeHead(200, {
-        'Content-type': 'application/json',
-        'Content-Length': Buffer.byteLength(r_json),
-    });
-    res.write(r_json);
-    res.end();
-}

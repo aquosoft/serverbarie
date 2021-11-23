@@ -3,11 +3,16 @@ DROP procedure IF EXISTS `pa_contadorpdf_Leer`;
 
 DELIMITER $$
 USE `db_persist`$$
-CREATE DEFINER=`servici4`@`localhost` PROCEDURE `pa_contadorpdf_Leer`()
+CREATE DEFINER=`servici4`@`localhost` PROCEDURE `pa_contadorpdf_Leer`(IN `unTipo` INT)
     NO SQL
 BEGIN
-  select ifnull(max(Id),0) CantidadActual from contadorpdf;
-END$$
+/*
+	tipo 1 Farmacia
+    tipo 2 Consulta
+    tipo 3 practica
+*/
 
-DELIMITER ;
+  select ifnull(max(cantidad),0) CantidadActual from contadorpdf
+  where (tipo = unTipo);
+END$$
 

@@ -6,6 +6,8 @@ let setting = {
         password: variables.MySqlpassword,
         database: variables.MySqldatabase
     },
+    HOST : variables.host,
+    PORT : variables.port    
 }
 
 

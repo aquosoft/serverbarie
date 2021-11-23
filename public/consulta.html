@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>  
+  <title>server corriendo</title>
+</head>
+<body>
+
+</body>
+<script>
+  $(function() {
+    $.ajax({
+      url: "http://190.247.169.171:3007/crearPdfConsulta",
+      context: document.body,
+      success: function(data){
+        setTimeout(() => {
+          window.open(data,"_self");  
+        }, 300);
+      }
+    });
+  });
+
+</script>
+
+</html>
