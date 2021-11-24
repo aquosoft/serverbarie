@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `pa_contadorpdf_Leer`;
 
 DELIMITER $$
 USE `db_persist`$$
-CREATE DEFINER=`servici4`@`localhost` PROCEDURE `pa_contadorpdf_Leer`(IN `unTipo` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_contadorpdf_Leer`(IN `unTipo` INT)
     NO SQL
 BEGIN
 /*

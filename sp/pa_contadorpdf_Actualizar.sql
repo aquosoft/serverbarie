@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `pa_contadorpdf_Actualizar`;
 
 DELIMITER $$
 USE `db_persist`$$
-CREATE DEFINER=`servici4`@`localhost` PROCEDURE `pa_contadorpdf_Actualizar`(IN `unDetalle` varchar(255),IN `unTipo` INT)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `pa_contadorpdf_Actualizar`(IN `unDetalle` varchar(255),IN `unTipo` INT)
     MODIFIES SQL DATA
     SQL SECURITY INVOKER
 BEGIN    
