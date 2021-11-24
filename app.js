@@ -75,11 +75,12 @@ app.get('/crearPdfPractica', cors(), function(req, res) {
             
             pdfDoc.pipe(fs.createWriteStream(pathPdf));
             
-            pdfDoc.image('fondoPractica.png', 0, 0, 0);     
+            //pdfDoc.image('fondoPractica.png', 0, 0, 0);  
+            pdfDoc.image('fondoPractica.png', 15, 15, {width: 600});   
             
-            pdfDoc.fontSize(24);
-            pdfDoc.text("{0}".format(nro),10,10);            
-            pdfDoc.text("{0}".format(nro),100,10);
+            pdfDoc.fontSize(14);
+            pdfDoc.text("{0}".format(nro),80,24,{lineBreak:false});            
+            pdfDoc.text("{0}".format(nro),550,24,{lineBreak:false});
           
 
             pdfDoc.end();
@@ -120,11 +121,13 @@ app.get('/crearPdfConsulta', cors(), function(req, res) {
             
             pdfDoc.pipe(fs.createWriteStream(pathPdf));
             
-            pdfDoc.image('fondoConsulta.png', 0, 0, 0);     
+            pdfDoc.image('fondoConsulta.png', 15, 15, {width: 600});
+            //pdfDoc.image('fondoConsulta.png', 0, 0, 0);     
             
-            pdfDoc.fontSize(24);
-            pdfDoc.text("{0}".format(nro),10,10);            
-            pdfDoc.text("{0}".format(nro),100,10);
+            pdfDoc.fontSize(12);
+            //pdfDoc.text("{0}".format(nro),105,40);            
+            pdfDoc.text("{0}".format(nro),97,40,{lineBreak:false});            
+            pdfDoc.text("{0}".format(nro),530,37,{lineBreak:false});
           
 
             pdfDoc.end();
@@ -165,11 +168,17 @@ app.get('/crearPdfFarmacia', cors(), function(req, res) {
             
             pdfDoc.pipe(fs.createWriteStream(pathPdf));
             
-            pdfDoc.image('fondoFarmacia.png', 0, 0, 0);     
+            //pdfDoc.image('fondoFarmacia.png', 0, 0, 0);   
+            pdfDoc.image('fondoFarmacia.png', 15, 15, {width: 600});
+
+
+            //pdfDoc.image('fondoFarmacia.png', 0, 0, {scale: 0.5});
+                     
+  
             
-            pdfDoc.fontSize(24);
-            pdfDoc.text("{0}".format(nro),10,10);            
-            pdfDoc.text("{0}".format(nro),100,10);
+            pdfDoc.fontSize(14);
+            pdfDoc.text("{0}".format(nro),80,28,{lineBreak:false});            
+            pdfDoc.text("{0}".format(nro),550,28,{lineBreak:false});
           
             pdfDoc.end();
 
