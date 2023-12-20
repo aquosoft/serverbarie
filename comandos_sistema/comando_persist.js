@@ -39,7 +39,7 @@ comandos.registrar({
 
 
 function findAndRemoveOldFiles(inputDir, keepCount, callback) {
-    debugger;
+    //debugger;
     if(!callback) {
         callback = function (err, removeFiles) {
             // default callback: doing nothing
@@ -47,7 +47,7 @@ function findAndRemoveOldFiles(inputDir, keepCount, callback) {
     };
 
     fs.readdir(inputDir, function (err, files) {
-        debugger;
+        //debugger;
         if(err) {
             return callback(err);
         }
@@ -57,9 +57,9 @@ function findAndRemoveOldFiles(inputDir, keepCount, callback) {
         });
 
         async.map(fileNames, function (fileName, cb) {
-            debugger;
+            //debugger;
             fs.stat(fileName, function (err, stat) {
-                debugger;
+                //debugger;
                 if(err) {
                     return cb(err);
                 };
@@ -71,7 +71,7 @@ function findAndRemoveOldFiles(inputDir, keepCount, callback) {
                 });
             });
         }, function (err, files) {
-            debugger;
+            //debugger;
             if(err) {
                 return callback(err);
             };
